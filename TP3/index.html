@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP3 — JavaScript + données</title>
+  <link href="style.css" rel="stylesheet"/>
+  <style>
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Mes projets</h1>
+    <p>Gestion de projets avec JavaScript — filtrage, ajout dynamique et persistance.</p>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>Filtrer par technologie</h2>
+      <div class="filtres">
+        <button class="filtre active" data-tag="tous">Tous</button>
+        <button class="filtre" data-tag="HTML">HTML</button>
+        <button class="filtre" data-tag="CSS">CSS</button>
+        <button class="filtre" data-tag="JS">JS</button>
+        <button class="filtre" data-tag="API">API</button>
+        <button class="filtre" data-tag="Figma">Figma</button>
+      </div>
+
+      <!-- Compteur de résultats -->
+      <p class="compteur" aria-live="polite"></p>
+
+      <!-- Conteneur des cartes (généré en JS) -->
+      <div id="projets-liste">
+        <p class="vide">Chargement des projets...</p>
+      </div>
+    </section>
+
+    <!-- ================================
+         FORMULAIRE D'AJOUT
+         ================================ -->
+    <section>
+      <form id="form-ajout">
+        <h2>Ajouter un projet</h2>
+
+        <div class="form-group">
+          <label for="input-titre">Titre du projet</label>
+          <input type="text" id="input-titre" placeholder="Ex : Mon portfolio" required>
+        </div>
+
+        <div class="form-group">
+          <label for="input-desc">Description</label>
+          <input type="text" id="input-desc" placeholder="Ex : Site personnel responsive" required>
+        </div>
+
+        <div class="form-group">
+          <label for="input-tags">Technologies</label>
+          <input type="text" id="input-tags" placeholder="Ex : HTML, CSS, JS">
+          <small>Séparez les tags par des virgules</small>
+        </div>
+
+        <button type="submit">Ajouter</button>
+      </form>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>TP3 R2.12 — Intégration Web — MMI 2026</p>
+  </footer>
+
+  <!-- ================================
+       JAVASCRIPT : à vous de jouer !
+       Créez un fichier script.js et liez-le ici.
+       ================================ -->
+   <script src="script.js"></script>
+
+</body>
+</html>
