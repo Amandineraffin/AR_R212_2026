@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Mon super site</title>
+<link rel="stylesheet" href="style.css">
+    
+</head>   
+
+  <!-- PROBLÈME : pas de balises sémantiques, tout est en div -->
+  <header> 
+    <h1="titre">Portfolio</h1>
+    <nav>
+    
+      <ul>
+        <li><a href="#projets">Projets</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+</header>
+
+  <div id="main">
+    <div class="content">
+
+      <div class="intro">
+        <div class="intro-titre">Bienvenue sur mon portfolio</div>
+        <div class="intro-description">Étudiante en MMI, passionnée par le web.</div>
+      </div>
+
+      <div class="projets-section" id="projets">
+        <div class="section-titre">Mes projets</div>
+
+        <div class="filtres-container">
+          <span class="filtre actif" onclick="filtrer('tous')">Tous</span>
+          <span class="filtre" onclick="filtrer('HTML')">HTML</span>
+          <span class="filtre" onclick="filtrer('CSS')">CSS</span>
+          <span class="filtre" onclick="filtrer('JS')">JS</span>
+        </div>
+
+        <div class="grille-projets" id="grille">
+          <!-- Rempli par JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modale -->
+  <div class="modale-overlay" id="modale">
+    <div class="modale-contenu">
+      <span class="modale-fermer" onclick="fermerModale()">×</span>
+      <div id="modale-body"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>© 2026 — Mon portfolio</div>
+  </div>
+
+</body>
+</html>
