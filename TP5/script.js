@@ -1,68 +1,89 @@
- <script>
-  
-    const projets = [
-      { id: 1, titre: "Site vitrine", description: "Un site pour une boulangerie locale. Design responsive et moderne.", tags: ["HTML", "CSS"] },
-      { id: 2, titre: "Quiz interactif", description: "Application de quiz avec score et timer.", tags: ["JS", "HTML"] },
-      { id: 3, titre: "Portfolio v1", description: "Ma première version de portfolio.", tags: ["HTML", "CSS"] },
-      { id: 4, titre: "Dashboard météo", description: "Tableau de bord météo avec API Open Meteo.", tags: ["JS", "CSS"] },
-      { id: 5, titre: "Blog tech", description: "Blog statique sur le développement web.", tags: ["HTML", "CSS", "JS"] },
-      { id: 6, titre: "Jeu du pendu", description: "Jeu du pendu en JavaScript vanilla.", tags: ["JS"] }
-    ];
+const projets = [
+  { id: 1, titre: "Site vitrine",    description: "Un site pour une boulangerie locale.", tags: ["HTML", "CSS"] },
+  { id: 2, titre: "Quiz interactif", description: "Application de quiz avec score et timer.", tags: ["JS", "HTML"] },
+  { id: 3, titre: "Portfolio v1",    description: "Ma première version de portfolio.", tags: ["HTML", "CSS"] },
+  { id: 4, titre: "Dashboard météo", description: "Tableau de bord météo avec API Open Meteo.", tags: ["JS", "CSS"] },
+  { id: 5, titre: "Blog tech",       description: "Blog statique sur le développement web.", tags: ["HTML", "CSS", "JS"] },
+  { id: 6, titre: "Jeu du pendu",    description: "Jeu du pendu en JavaScript vanilla.", tags: ["JS"] }
+];
 
-    function afficherProjets(liste) {
-      var grille = document.getElementById('grille');
-      grille.innerHTML = '';
-      for (var i = 0; i < liste.length; i++) {
-        var p = liste[i];
-        var carte = document.createElement('div');
-        carte.className = 'carte-projet';
-        carte.innerHTML = '<div class="carte-titre">' + p.titre + '</div>' +
-          '<div class="carte-description">' + p.description + '</div>' +
-          '<div class="carte-tags">' + p.tags.map(function(t) { return '<span>' + t + '</span>'; }).join('') + '</div>' +
-          '<button class="carte-bouton" onclick="ouvrirModale(' + p.id + ')">Voir détail</button>';
-        grille.appendChild(carte);
-      }
-    }
+let dernierFocus = null;
 
-    function filtrer(tag) {
-      // Gestion visuelle des filtres actifs
-      var filtres = document.querySelectorAll('.filtre');
-      for (var i = 0; i < filtres.length; i++) {
-        filtres[i].style.background = '#ddd';
-        filtres[i].style.color = '#333';
-      }
-      event.target.style.background = '#1a1a2e';
-      event.target.style.color = 'white';
+function creerCarteDom(projet) {
+  const carte = document.createElement('article');
+  carte.className = 'carte-projet';
 
-      if (tag === 'tous') {
-        afficherProjets(projets);
-      } else {
-        var filtres = projets.filter(function(p) { return p.tags.indexOf(tag) !== -1; });
-        afficherProjets(filtres);
-      }
-    }
+  const titre = document.createElement('div');
+  titre.className = 'carte-titre';
+  titre.textContent = projet.titre;
 
-    function ouvrirModale(id) {
-      var projet = null;
-      for (var i = 0; i < projets.length; i++) {
-        if (projets[i].id === id) {
-          projet = projets[i];
-          break;
-        }
-      }
-      if (!projet) return;
+  const description = document.createElement('div');
+  description.className = 'carte-description';
+  description.textContent = projet.description;
 
-      document.getElementById('modale-body').innerHTML =
-        '<h2>' + projet.titre + '</h2>' +
-        '<p>' + projet.description + '</p>' +
-        '<p>Tags : ' + projet.tags.join(', ') + '</p>';
+  const tags = document.createElement('div');
+  tags.className = 'carte-tags';
+  projet.tags.forEach(t => {
+    const span = document.createElement('span');
+    span.textContent = t;
+    tags.appendChild(span);
+  });
 
-      document.getElementById('modale').style.display = 'block';
-    }
+  const btn = document.createElement('button');
+  btn.className = 'carte-bouton';
+  btn.textContent = 'Voir détail';
+  btn.setAttribute('aria-label', `Voir le détail : ${projet.titre}`);
+  btn.addEventListener('click', () => ouvrirModale(projet.id));
 
-    function fermerModale() {
-      document.getElementById('modale').style.display = 'none';
-    }
+  carte.append(titre, description, tags, btn);
+  return carte;
+}
 
-    afficherProjets(projets);
-  </script>
+function afficherProjets(liste) {
+  const grille = document.querySelector('#grille');
+  grille.innerHTML = '';
+  liste.forEach(p => grille.appendChild(creerCarteDom(p)));
+}
+
+function filtrer(tag) {
+  document.querySelectorAll('.filtre').forEach(f => f.classList.remove('actif'));
+  event.target.classList.add('actif');
+
+  const resultats = tag === 'tous'
+    ? projets
+    : projets.filter(p => p.tags.includes(tag));
+
+  afficherProjets(resultats);
+}
+
+function ouvrirModale(id) {
+  const projet = projets.find(p => p.id === id);
+  if (!projet) return;
+
+  document.querySelector('#modale-body').innerHTML =
+    `<h2>${projet.titre}</h2>
+     <p>${projet.description}</p>
+     <p>Tags : ${projet.tags.join(', ')}</p>`;
+
+  const modale = document.querySelector('#modale');
+  modale.classList.remove('hidden');
+
+  dernierFocus = document.activeElement;
+  const btnFermer = modale.querySelector('.modale-fermer');
+  if (btnFermer) btnFermer.focus();
+}
+
+function fermerModale() {
+  document.querySelector('#modale').classList.add('hidden');
+  if (dernierFocus) dernierFocus.focus();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') fermerModale();
+});
+
+document.querySelector('#modale').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) fermerModale();
+});
+
+afficherProjets(projets);
